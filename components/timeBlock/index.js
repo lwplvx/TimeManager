@@ -17,6 +17,16 @@ Vue.component(componentName, {
     data: function () {
         return {
             isEdit: false,
+            types: [
+                "primary",
+                "secondary",
+                "success",
+                "danger",
+                "warning",
+                "info",
+                "light",
+                "dark",
+            ]
         };
     },
     props: ['value'],
@@ -30,10 +40,11 @@ Vue.component(componentName, {
     template: getTemplate(tmpId),
     methods: {
         dblclick: function () {
-            this.isEdit = !this.isEdit;
-            if (!this.isEdit) {
-                this.$emit('contentchange');
-            }
+            this.isEdit = true;
+        },
+        editOk: function () {
+            this.isEdit = false;
+            this.$emit('contentchange');
         },
         closeClick: function () {
             this.$emit('close', this.value);
@@ -41,6 +52,12 @@ Vue.component(componentName, {
         textareaChange: function () {
             this.$emit('contentchange');
         },
+        typeClick: function (val) {
+            this.value.type = val;
+            if (this.isEdit) {
+                this.$emit('contentchange');
+            }
+        }
     }
 
 });

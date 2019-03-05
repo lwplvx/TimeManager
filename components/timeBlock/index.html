@@ -1,16 +1,35 @@
 <div id="timeBlock-tmp">
-    <div v-bind:class="classObject" class="alert-dismissible fade show" v-on:dblclick="dblclick" role="alert">
-        <textarea class="form-control" v-if="isEdit" 
-            v-model="value.content" v-on:onChange=textareaChange></textarea>
-        <span v-if="!isEdit">{{value.content}}</span>
+    <div v-bind:class="classObject" class="alert-dismissible fade show" style=" padding-right: 20px;">
+        <div v-if="isEdit" class="d-flex flex-row-reverse" style="margin-top:-15px">
+            <div class="p-1">
+                <div class="btn-group btn-group-sm" role="group" aria-label="Button group with nested dropdown">
+                    <button type="button" class="btn btn-danger" v-on:click="closeClick">移除</button>
+                    <button type="button" class="btn btn-info" v-on:click="editOk">编辑完成</button>
 
-        <button v-if="!isEdit" type="button" class="close" data-dismiss="alert" aria-label="Close" v-on:click="closeClick" > 
-            <span aria-hidden="true">&times;</span>
-        </button>
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            Select Type
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            <template v-for="item in types">
+                                <a class="dropdown-item" v-on:click="typeClick(item)" href="#">{{item}}</a>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div v-on:dblclick="dblclick" role="alert">
+            <textarea class="form-control" v-if="isEdit" v-model="value.content" v-on:onChange=textareaChange></textarea>
+            <span v-if="!isEdit">{{value.content}}</span>
+        </div>
+
+
     </div>
+</div>
 
-</div> 
- 
 <script src="../../staitc/js/core/core.js"></script>
 <script>
     setTemplate('timeBlock-tmp');
