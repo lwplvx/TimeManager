@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<head>
+    <title>
+        Your Times
+    </title>
+</head>
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+<script src="./staitc/js/core/core.js"></script>
+<script src="./components/index.js"></script>
+
+<body>
+    <div id="app" class="container">
+
+        <div class="row">
+
+            <clock></clock>
+
+        </div>
+        <section>
+
+            <template v-for="item in timeBlocks">
+
+                <time-block :value="item" v-on:contentchange='blockContentChange' v-on:close='blockClose'>
+
+                </time-block>
+
+            </template>
+
+        </section>
+        <section>
+            <div>
+                <!-- 这里的 `foo` 不会更新！ -->
+                <button v-on:click="addNewBlock">Add new block</button>
+            </div>
+
+        </section>
+        <section>
+
+            <template v-for="item in removeBlocks" >
+
+                <time-block :value="item" v-on:close='removeBlockClose'>
+
+                </time-block>
+
+            </template>
+
+        </section>
+
+    </div>
+
+    <script>
+        // var obj = str.parseJSON(); //由JSON字符串转换为JSON对象 
+        // var obj = JSON.parse(str); //由JSON字符串转换为JSON对象
+
+
+        var myEvents = [{
+                type: 'primary',
+                content: '1'
+            },
+            {
+                type: 'secondary',
+                content: '2'
+            },
+            {
+                type: 'success',
+                content: '3'
+            },
+            {
+                type: 'danger',
+                content: '4'
+            },
+            {
+                type: 'warning',
+                content: '5'
+            },
+            {
+                type: 'light',
+                content: '6'
+            },
+            {
+                type: 'info',
+                content: '7'
+            },
+            {
+                type: 'dark',
+                content: '8'
+            },
+        ];
+
+        var objStr = getItem("myEvents");
+
+        if (objStr) {
+            myEvents = JSON.parse(objStr);
+        }
+
+        objStr = getItem("myEvents-removes");
+        var myEventsRemoves = [];
+        if (objStr) {
+            myEventsRemoves = JSON.parse(objStr);
+        }
+
+        var dataObj = {
+            timeBlocks: myEvents,
+            removeBlocks: myEventsRemoves
+        };
+
+        new Vue({
+            el: '#app',
+            components: {
+                // demo,
+                // 'time-block':require(['./timeBlock/index.js']),
+                //'my-component': () => import('./') 
+            },
+            data: function () {
+                return dataObj;
+            },
+            methods: {
+                addNewBlock: function () {
+                    this.timeBlocks.push({
+                        type: 'primary',
+                        content: ''
+                    });
+                },
+                blockContentChange: function () {
+                    // JSON.stringify()
+                    // obj..toJSONString()
+                    setItem("myEvents", JSON.stringify(this.timeBlocks));
+                },
+                blockClose: function (val) {
+                    this.removeBlocks = this.getRemoves();
+                    val.type = 'success';
+                    this.removeBlocks.push(val);
+                    setItem("myEvents-removes", JSON.stringify(this.removeBlocks));
+                    this.timeBlocks.remove(val);
+                    setItem("myEvents", JSON.stringify(this.timeBlocks));
+                },
+                getRemoves: function () {
+                    var objStr = getItem("myEvents-removes");
+                    if (objStr) {
+                        return JSON.parse(objStr);
+                    }
+                    return [];
+                },
+                removeBlockClose: function (val) {
+
+                    this.removeBlocks.remove(val);  
+                    setItem("myEvents-removes", JSON.stringify(this.removeBlocks));
+                }
+            }
+
+        })
+    </script>
+</body>
+
+</html>
