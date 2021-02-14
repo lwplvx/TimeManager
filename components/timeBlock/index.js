@@ -47,6 +47,7 @@ Vue.component(componentName, {
             this.$emit('contentchange');
         },
         closeClick: function () {
+            this.isEdit = false;
             this.$emit('close', this.value);
         },
         textareaChange: function () {
